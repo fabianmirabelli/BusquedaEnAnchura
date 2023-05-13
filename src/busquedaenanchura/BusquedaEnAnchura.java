@@ -34,14 +34,13 @@ public class BusquedaEnAnchura {
     // Posibles Movimientos de la pieza
     private static final Map<String, List<String>> mov = new HashMap<>();
     static {
-         mov.put("B", Collections.singletonList("B1"));
-        // mov.put("B", Arrays.asList("B1", "A"));
-        mov.put("B1", Collections.singletonList("B2"));
-        mov.put("B2", Collections.singletonList("B3"));
-        mov.put("B3", Collections.singletonList("B4"));
-        mov.put("B4", Collections.singletonList("B5"));
-        mov.put("B5", Collections.singletonList("B6"));
-        mov.put("B6", Collections.singletonList("A"));
+        mov.put("B", Collections.singletonList("B1"));
+        mov.put("B1", Arrays.asList("B2", "B"));
+        mov.put("B2", Arrays.asList("B3", "B1"));
+        mov.put("B3", Arrays.asList("B4", "B2"));
+        mov.put("B4", Arrays.asList("B5", "B3"));
+        mov.put("B5", Arrays.asList("B6", "B4"));
+        mov.put("B6", Arrays.asList("A", "B5"));
         mov.put("A", Collections.emptyList()); 
     }
 
