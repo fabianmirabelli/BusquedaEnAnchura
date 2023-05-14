@@ -49,7 +49,7 @@ public class BusquedaEnAnchura {
         Set<String> visitados = new HashSet<>();
 
         cola.add(new Pair<>(inicio, new ArrayList<>()));
-        
+       
         while (!cola.isEmpty()) {
             Pair<String, List<String>> nodoActual = cola.poll();
             String estadoActual = nodoActual.getKey();
