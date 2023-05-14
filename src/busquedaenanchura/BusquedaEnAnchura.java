@@ -11,68 +11,86 @@ package busquedaenanchura;
  */
 
 import java.util.*;
-import javafx.util.Pair;
+
+class Nodo {
+    String valor;
+    List<Nodo> hijos;
+
+    public Nodo(String valor) {
+        this.valor = valor;
+        this.hijos = new ArrayList<>();
+    }
+}
 
 public class BusquedaEnAnchura {
-
-  // declaracion de variables y Estado Inicial y Objetivo
-    private static final String estadoInicial = "B";
-    private static final String estadoObjetivo = "A";
-    
-     public static void main(String[] args) {
-        List<String> caminoDeSolucion = buscarEnAnchura(estadoInicial, estadoObjetivo, movimiento);
-
-        // Mostrar el resultado en pantalla
-        if (caminoDeSolucion != null) {
-            System.out.print("Se encontró un camino hacia el objetivo: ");
-            System.out.println(caminoDeSolucion);
-        } else {
-            System.out.println("No se encontró un camino hacia el objetivo.");
-        }
+    public static void main(String[] args) {
+        Nodo raiz = construirArbol();
+        List<List<Nodo>> rutas = buscarRutas(raiz);
+        mostrarRutas(rutas);
     }
 
-    // Posibles Movimientos de la pieza
-    private static final Map<String, List<String>> movimiento = new HashMap<>();
-    static {
-        movimiento.put("B", Collections.singletonList("B1"));
-        movimiento.put("B1", Arrays.asList("B2", "B"));
-        movimiento.put("B2", Arrays.asList("B3", "B1"));
-        movimiento.put("B3", Arrays.asList("B4", "B2"));
-        movimiento.put("B4", Arrays.asList("B5", "B3"));
-        movimiento.put("B5", Arrays.asList("B6", "B4"));
-        movimiento.put("B6", Arrays.asList("A", "B5"));
-        movimiento.put("A", Collections.emptyList()); 
+    private static Nodo construirArbol() {
+        Nodo raiz = new Nodo("B");
+        Nodo b1 = new Nodo("B1");
+        Nodo b2 = new Nodo("B2");
+        Nodo b3 = new Nodo("B3");
+        Nodo b4 = new Nodo("B4");
+        Nodo b5 = new Nodo("B5");
+        Nodo b6 = new Nodo("B6");
+        Nodo a = new Nodo("A");
+
+        raiz.hijos.add(b1);
+        raiz.hijos.add(b2);
+        b1.hijos.add(a);
+        b2.hijos.add(b3);
+        b2.hijos.add(b4);
+        b3.hijos.add(a);
+        b4.hijos.add(b5);
+        b4.hijos.add(b6);
+        b5.hijos.add(a);
+        b6.hijos.add(a);
+
+        return raiz;
     }
 
-    public static List<String> buscarEnAnchura(String inicio, String objetivo, Map<String, List<String>> mov) {
-        Queue<Pair<String, List<String>>> cola = new LinkedList<>();
-        Set<String> visitados = new HashSet<>();
+    private static List<List<Nodo>> buscarRutas(Nodo raiz) {
+        List<List<Nodo>> rutas = new ArrayList<>();
+        Queue<List<Nodo>> cola = new LinkedList<>();
+        List<Nodo> rutaInicial = new ArrayList<>();
+        rutaInicial.add(raiz);
+        cola.offer(rutaInicial);
 
-        cola.add(new Pair<>(inicio, new ArrayList<>()));
-       
         while (!cola.isEmpty()) {
-            Pair<String, List<String>> nodoActual = cola.poll();
-            String estadoActual = nodoActual.getKey();
-            List<String> camino = nodoActual.getValue();
+            List<Nodo> rutaActual = cola.poll();
+            Nodo nodoActual = rutaActual.get(rutaActual.size() - 1);
 
-            if (estadoActual.equals(objetivo)) {
-   
-                camino.add(estadoActual);
-                return camino;
+            if (nodoActual.valor.equals("A")) {
+                rutas.add(rutaActual);
+                continue;
             }
 
-            if (!visitados.contains(estadoActual)) {
-                visitados.add(estadoActual);
-                List<String> movPosibles = movimiento.get(estadoActual);
-                for (String movimiento : movPosibles) {
-                    List<String> nuevoCamino = new ArrayList<>(camino);
-                    nuevoCamino.add(estadoActual);
-                    cola.add(new Pair<>(movimiento, nuevoCamino));
-                }
+            for (Nodo hijo : nodoActual.hijos) {
+                List<Nodo> nuevaRuta = new ArrayList<>(rutaActual);
+                nuevaRuta.add(hijo);
+                cola.offer(nuevaRuta);
             }
         }
 
-        return null;
+        return rutas;
     }
 
+    private static void mostrarRutas(List<List<Nodo>> rutas) {
+        if (rutas.isEmpty()) {
+            System.out.println("No se encontraron rutas");
+        } else {
+            System.out.println("Rutas encontradas:");
+
+            for (List<Nodo> ruta : rutas) {
+                for (Nodo nodo : ruta) {
+                    System.out.print(nodo.valor + " ");
+                }
+                System.out.println();
+            }
+        }
+    }
 }
