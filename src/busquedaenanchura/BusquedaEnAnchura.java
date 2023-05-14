@@ -41,12 +41,13 @@ public class BusquedaEnAnchura {
 
         raiz.hijos.add(b1);
         raiz.hijos.add(b2);
-        b1.hijos.add(a);
-        b2.hijos.add(b3);
+        
+        b1.hijos.add(b3);
         b2.hijos.add(b4);
-        b3.hijos.add(a);
-        b4.hijos.add(b5);
-        b4.hijos.add(b6);
+        b2.hijos.add(a);
+        b3.hijos.add(b5);
+        b3.hijos.add(b6);
+        b4.hijos.add(a);
         b5.hijos.add(a);
         b6.hijos.add(a);
 
@@ -60,12 +61,19 @@ public class BusquedaEnAnchura {
         rutaInicial.add(raiz);
         cola.offer(rutaInicial);
 
+        List<Nodo> mejorRuta = null;
+
         while (!cola.isEmpty()) {
             List<Nodo> rutaActual = cola.poll();
             Nodo nodoActual = rutaActual.get(rutaActual.size() - 1);
 
             if (nodoActual.valor.equals("A")) {
                 rutas.add(rutaActual);
+                
+                if (mejorRuta == null || rutaActual.size() < mejorRuta.size()) {
+                    mejorRuta = rutaActual;
+                }
+                
                 continue;
             }
 
@@ -75,22 +83,33 @@ public class BusquedaEnAnchura {
                 cola.offer(nuevaRuta);
             }
         }
+        
+        rutas.remove(mejorRuta);
+        rutas.add(0, mejorRuta);
 
         return rutas;
     }
 
     private static void mostrarRutas(List<List<Nodo>> rutas) {
         if (rutas.isEmpty()) {
-            System.out.println("No se encontraron rutas");
+            System.out.println("No se encontraron movimientos posibles");
         } else {
-            System.out.println("Rutas encontradas:");
+            System.out.println("El primer movimiento para colocar la pieza con el metodo en anchura en A es :");
+            mostrarRuta(rutas.get(0));
 
-            for (List<Nodo> ruta : rutas) {
-                for (Nodo nodo : ruta) {
-                    System.out.print(nodo.valor + " ");
+            if (rutas.size() > 1) {
+                System.out.println("Otros movimientos posibles de la pieza:");
+                for (int i = 1; i < rutas.size(); i++) {
+                    mostrarRuta(rutas.get(i));
                 }
-                System.out.println();
             }
         }
+    }
+
+    private static void mostrarRuta(List<Nodo> ruta) {
+        for (Nodo nodo : ruta) {
+            System.out.print(nodo.valor + " ");
+        }
+        System.out.println();
     }
 }
