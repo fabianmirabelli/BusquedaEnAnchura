@@ -16,15 +16,15 @@ import javafx.util.Pair;
 public class BusquedaEnAnchura {
 
   // declaracion de variables y Estado Inicial y Objetivo
-    private static final String eInicio = "B";
-    private static final String eObjetivo = "A";
+    private static final String estadoInicial = "B";
+    private static final String estadoObjetivo = "A";
     
      public static void main(String[] args) {
-        List<String> caminoDeSolucion = buscarEnAnchura(eInicio, eObjetivo, mov);
+        List<String> caminoDeSolucion = buscarEnAnchura(estadoInicial, estadoObjetivo, movimiento);
 
         // Mostrar el resultado en pantalla
         if (caminoDeSolucion != null) {
-            System.out.println("Se encontró un camino hacia el objetivo:");
+            System.out.print("Se encontró un camino hacia el objetivo: ");
             System.out.println(caminoDeSolucion);
         } else {
             System.out.println("No se encontró un camino hacia el objetivo.");
@@ -32,16 +32,16 @@ public class BusquedaEnAnchura {
     }
 
     // Posibles Movimientos de la pieza
-    private static final Map<String, List<String>> mov = new HashMap<>();
+    private static final Map<String, List<String>> movimiento = new HashMap<>();
     static {
-        mov.put("B", Collections.singletonList("B1"));
-        mov.put("B1", Arrays.asList("B2", "B"));
-        mov.put("B2", Arrays.asList("B3", "B1"));
-        mov.put("B3", Arrays.asList("B4", "B2"));
-        mov.put("B4", Arrays.asList("B5", "B3"));
-        mov.put("B5", Arrays.asList("B6", "B4"));
-        mov.put("B6", Arrays.asList("A", "B5"));
-        mov.put("A", Collections.emptyList()); 
+        movimiento.put("B", Collections.singletonList("B1"));
+        movimiento.put("B1", Arrays.asList("B2", "B"));
+        movimiento.put("B2", Arrays.asList("B3", "B1"));
+        movimiento.put("B3", Arrays.asList("B4", "B2"));
+        movimiento.put("B4", Arrays.asList("B5", "B3"));
+        movimiento.put("B5", Arrays.asList("B6", "B4"));
+        movimiento.put("B6", Arrays.asList("A", "B5"));
+        movimiento.put("A", Collections.emptyList()); 
     }
 
     public static List<String> buscarEnAnchura(String inicio, String objetivo, Map<String, List<String>> mov) {
@@ -63,7 +63,7 @@ public class BusquedaEnAnchura {
 
             if (!visitados.contains(estadoActual)) {
                 visitados.add(estadoActual);
-                List<String> movPosibles = mov.get(estadoActual);
+                List<String> movPosibles = movimiento.get(estadoActual);
                 for (String movimiento : movPosibles) {
                     List<String> nuevoCamino = new ArrayList<>(camino);
                     nuevoCamino.add(estadoActual);
